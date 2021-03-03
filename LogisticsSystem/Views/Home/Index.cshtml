@@ -1,0 +1,82 @@
+﻿@using LogisticsSystem.Models
+
+@model  Item
+
+<br>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "inputform" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-offset-0 col-md-12">
+        @Html.ValidationSummary(true, "The following error has occurred:", new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.ItemID, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.ItemID, new { @class = "form-control form-control-sm", id = "txtItemID", @readonly = "readonly" })
+        @Html.ValidationMessageFor(m => m.ItemID, "", new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.ItemName, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.ItemName, new { @class = "form-control form-control-sm", id = "txtItemName" })
+        @Html.ValidationMessageFor(m => m.ItemName, "", new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Weight, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Weight, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", id = "txtWeight" })
+        @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text-danger" })
+    </div>    
+        <input type="submit" value="Save Item" class="btn btn-primary btn-sm" />   
+}
+
+<br>
+
+<div>
+    <div class="col-12">
+        <table class="table table-bordered table-condensed table-hover" id="itemTable">
+            <thead class="table-primary">
+                <tr>
+                    <th></th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Weight(kg)</th>
+                    <th scope="col">Cost($)</th>
+                    <th scope="col">Priority</th>
+                    <th scope="col">Type</th>
+                </tr>
+            </thead>
+            <tbody class="table-light">
+                @foreach (var item in ViewBag.ItemList)
+                {
+                    <tr>
+                        <td scope="row">
+                            <input type="checkbox" class="custom-control-input" value="@item.ItemID">
+                        </td>
+                        <td class="table-row">@item.ItemID</td>
+                        <td class="table-row">@item.ItemName</td>
+                        <td class="table-row">@item.Weight</td>
+                        <td class="table-row">@item.Cost</td>
+                        <td class="table-row">@item.Priority</td>
+                        <td class="table-row">@item.Type</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div>
+    <button onclick="DeleteItems()" class="btn btn-primary btn-sm mb-3">Delete Selected</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="NoSelectedItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body" style="text-align:center; background-color:red;color:#ffffff;">
+                <label>No selected items to be deleted.</label>
+            </div>
+        </div>
+    </div>
+</div>
+
